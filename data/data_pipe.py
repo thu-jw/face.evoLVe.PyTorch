@@ -9,6 +9,8 @@ from tqdm import tqdm
 
 
 def load_bin(path, rootdir, transform, image_size = [112, 112]):
+    path = str(path)
+    rootdir = str(rootdir)
     if not rootdir.exists():
         rootdir.mkdir()
     bins, issame_list = pickle.load(open(path, 'rb'), encoding='bytes')
