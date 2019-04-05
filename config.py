@@ -5,11 +5,11 @@ configurations = {
     1: dict(
         SEED = 1337, # random seed for reproduce results
 
-        DATA_ROOT = '/mnt/data/faces_emore', # the parent root where your train/val/test data are stored
-        MODEL_ROOT = '/mnt/buffer/model', # the root to buffer your checkpoints
-        LOG_ROOT = '/mnt/buffer/log', # the root to log your train/val status
-        BACKBONE_RESUME_ROOT = './', # the root to resume training from a saved checkpoint
-        HEAD_RESUME_ROOT = './', # the root to resume training from a saved checkpoint
+        DATA_ROOT = '/home/zwl/data/faces_emore', # the parent root where your train/val/test data are stored
+        MODEL_ROOT = '/home/zwl/buffer/model', # the root to buffer your checkpoints
+        LOG_ROOT = '/home/zwl/buffer/log', # the root to log your train/val status
+        BACKBONE_RESUME_ROOT = None, # './', # the root to resume training from a saved checkpoint
+        HEAD_RESUME_ROOT = None, #'./', # the root to resume training from a saved checkpoint
 
         BACKBONE_NAME = 'IR_SE_50', # support: ['ResNet_50', 'ResNet_101', 'ResNet_152', 'IR_50', 'IR_101', 'IR_152', 'IR_SE_50', 'IR_SE_101', 'IR_SE_152']
         HEAD_NAME = 'ArcFace', # support:  ['Softmax', 'ArcFace', 'CosFace', 'SphereFace', 'Am_softmax']
@@ -19,7 +19,7 @@ configurations = {
         RGB_MEAN = [0.5, 0.5, 0.5], # for normalize inputs to [-1, 1]
         RGB_STD = [0.5, 0.5, 0.5],
         EMBEDDING_SIZE = 512, # feature dimension
-        BATCH_SIZE = 512,
+        BATCH_SIZE = 128,
         DROP_LAST = True, # whether drop the last batch to ensure consistent batch_norm statistics
         LR = 0.1, # initial LR
         NUM_EPOCH = 125, # total epoch number (use the firt 1/25 epochs to warm up)
