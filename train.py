@@ -4,6 +4,7 @@ import torch.optim as optim
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 
+from data.dataset import FaceDataLoader
 from config import configurations
 from backbone.model_resnet import ResNet_50, ResNet_101, ResNet_152
 from backbone.model_irse import IR_50, IR_101, IR_152, IR_SE_50, IR_SE_101, IR_SE_152
@@ -58,29 +59,35 @@ if __name__ == '__main__':
 
     writer = SummaryWriter(LOG_ROOT) # writer for buffering intermedium results
 
-    train_transform = transforms.Compose([ # refer to https://pytorch.org/docs/stable/torchvision/transforms.html for more build-in online data augmentation
-        transforms.Resize([int(128 * INPUT_SIZE[0] / 112), int(128 * INPUT_SIZE[0] / 112)]), # smaller side resized
-        transforms.RandomCrop([INPUT_SIZE[0], INPUT_SIZE[1]]),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize(mean = RGB_MEAN,
-                             std = RGB_STD),
-    ])
+#        train_transform = transforms.Compose([ # refer to https://pytorch.org/docs/stable/torchvision/transforms.html for more build-in online data augmentation
+#        transforms.Resize([int(128 * INPUT_SIZE[0] / 112), int(128 * INPUT_SIZE[0] / 112)]), # smaller side resized
+#        transforms.RandomCrop([INPUT_SIZE[0], INPUT_SIZE[1]]),
+#        transforms.RandomHorizontalFlip(),
+#        transforms.ToTensor(),
+#        transforms.Normalize(mean = RGB_MEAN,
+#                             std = RGB_STD),
+#    ])
 
-    dataset_train = datasets.ImageFolder(os.path.join(DATA_ROOT, 'imgs'), train_transform)
+
+    # dataset_train = datasets.ImageFolder(os.path.join(DATA_ROOT, 'imgs'), train_transform)
 
     # create a weighted random sampler to process imbalanced data
-    weights = make_weights_for_balanced_classes(dataset_train.imgs, len(dataset_train.classes))
-    weights = torch.DoubleTensor(weights)
-    sampler = torch.utils.data.sampler.WeightedRandomSampler(weights, len(weights))
+    # weights = make_weights_for_balanced_classes(dataset_train.imgs, len(dataset_train.classes))
+    # weights = torch.DoubleTensor(weights)
+    # sampler = torch.utils.data.sampler.WeightedRandomSampler(weights, len(weights))
 
-    train_loader = torch.utils.data.DataLoader(
-        dataset_train, batch_size = BATCH_SIZE, sampler = sampler, pin_memory = PIN_MEMORY,
-        num_workers = NUM_WORKERS, drop_last = DROP_LAST
-    )
+#    train_loader = torch.utils.data.DataLoader(
+#        dataset_train, batch_size = BATCH_SIZE, sampler = sampler, pin_memory = PIN_MEMORY,
+#        num_workers = NUM_WORKERS, drop_last = DROP_LAST
+#    )
+    train_loader = FaceDataLoader(
+            os.path.join(DATA_ROOT, 'train.rec'),
+            batch_size = BATCH_SIZE,
+            )
 
-    NUM_CLASS = len(train_loader.dataset.classes)
-    print("Number of Training Classes: {}".format(NUM_CLASS))
+    NUM_CLASS = len(train_loader.classes)
+    # NUM_CLASS = len(train_loader.dataset.classes)
+    # print("Number of Training Classes: {}".format(NUM_CLASS))
 
     lfw, cfp_ff, cfp_fp, agedb, calfw, cplfw, vgg2_fp, lfw_issame, cfp_ff_issame, cfp_fp_issame, agedb_issame, calfw_issame, cplfw_issame, vgg2_fp_issame = get_val_data(DATA_ROOT)
 
