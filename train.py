@@ -181,6 +181,7 @@ if __name__ == '__main__':
                 warm_up_lr(batch + 1, NUM_BATCH_WARM_UP, LR, OPTIMIZER)
 
             # compute output
+            # print(f'inputs: {type(inputs)} {inputs.shape}', f'labels: {type(labels)} {labels.shape}')
             inputs = inputs.to(DEVICE)
             labels = labels.to(DEVICE).long()
             features = BACKBONE(inputs)
